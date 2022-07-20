@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="../dist/output.css" />
   </head>
   <body>
-    <nav class="container mx-auto flex w-full justify-between py-10">
+    <nav class="container mx-auto flex flex-col items-center sm:flex-row w-full justify-between py-10">
       <a href="./index.html"
-        ><img src="./image/logo.svg" alt="logo" width="157"
+        ><img src="./image/logo.svg" alt="logo" class="w-52 mb-5 sm:w-40 sm:mb-0"
       /></a>
-      <ul class="flex text-xl font-bold">
+      <ul class="flex text-base sm:text-xl font-bold ">
         <li>床墊優勢</li>
         <li class="ml-12">好評推薦</li>
         <li class="ml-12">運送方式</li>
@@ -23,20 +23,25 @@
     </nav>
     <div class="h-10 w-full bg-black"></div>
     <div class="flex justify-center pt-7 pb-16">
-      <ul class="container grid grid-cols-3 gap-x-8">
-        <li class="bg-banner col-span-3 flex h-[420px] items-end p-12 mb-16">
-          <h1 class="text-3xl text-white font-thin">窩窩家居<br />跟您一起品味生活</h1>
+      <ul class="container grid grid-cols-3 gap-x-8 gap-y-20">
+        <li class="bg-banner col-span-3 flex h-[420px] items-end p-12">
+          <h1 class="text-3xl font-thin text-white">
+            窩窩家居<br />跟您一起品味生活
+          </h1>
         </li>
-        <li class="text-2xl col-span-3 text-center mb-7">床墊優勢</li>
-        <li><img src="./image/tR426y5.png" alt=""></li>
-        <li><img src="./image/tR426y5.png" alt=""></li>
-        <li><img src="./image/tR426y5.png" alt=""></li>
+        <li class="col-span-3 text-center font-serif text-3xl font-bold">床墊優勢</li>
+        <li class="col-span-3 md:col-span-1 justify-self-center"><img src="./image/tR426y5.png" alt="" class="h-[140px] object-cover"/><p class="text-center font-serif text-lg">原木料環保</p></li>
+        <li class="col-span-3 md:col-span-1 justify-self-center"><img src="./image/Fd2MiBb.png" alt="" class="h-[140px] object-cover"/><p class="text-center font-serif text-lg">好收納</p></li>
+        <li class="col-span-3 md:col-span-1 justify-self-center"><img src="./image/5n1uTFh.png" alt="" class="h-[140px] object-cover"/><p class="text-center font-serif text-lg">好組裝</p></li>
       </ul>
     </div>
+    <section class= "bg-[#F8F8F8] h-[484px]"></section>
   </body>
 </html>
 <style>
   .bg-banner {
     background-image: url("./image/3ewLAKn.png");
+    background-size: cover;
+    background-position: center center;
   }
 </style>
