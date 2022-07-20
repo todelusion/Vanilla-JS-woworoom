@@ -1,23 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WowoRoom</title>
-    <link rel="stylesheet" href="../dist/output.css">
-</head>
-<body>
-    <nav class="container py-10">
-        <a href="./index.html"><img src="./image/logo.svg" alt="logo" width="157"></a>
-        <ul>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li>
-                <a href="./cms.html"><h1 class="text-xl">立即預定</h1></a>
-            </li>
-        </ul>
+    <link rel="stylesheet" href="../dist/output.css" />
+  </head>
+  <body>
+    <nav class="container mx-auto flex w-full justify-between py-10">
+      <a href="./index.html"
+        ><img src="./image/logo.svg" alt="logo" width="157"
+      /></a>
+      <ul class="flex text-xl font-bold">
+        <li>床墊優勢</li>
+        <li class="ml-12">好評推薦</li>
+        <li class="ml-12">運送方式</li>
+        <li class="ml-12">
+          <a href="./cms.html" class="hover:text-primary">立即預定</a>
+        </li>
+      </ul>
     </nav>
-</body>
+    <div class="h-10 w-full bg-black"></div>
+    <div class="flex justify-center pt-7 pb-16">
+      <ul class="container grid grid-cols-3 gap-x-8">
+        <li class="bg-banner col-span-3 flex h-[420px] items-end p-12 mb-16">
+          <h1 class="text-3xl text-white font-thin">窩窩家居<br />跟您一起品味生活</h1>
+        </li>
+        <li class="text-2xl col-span-3 text-center mb-7">床墊優勢</li>
+        <li><img src="./image/tR426y5.png" alt=""></li>
+        <li><img src="./image/tR426y5.png" alt=""></li>
+        <li><img src="./image/tR426y5.png" alt=""></li>
+      </ul>
+    </div>
+  </body>
 </html>
+<style>
+  .bg-banner {
+    background-image: url("./image/3ewLAKn.png");
+  }
+</style>

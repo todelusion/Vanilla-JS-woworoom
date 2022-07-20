@@ -1,5 +1,14 @@
 {
+  "name": "05_woworoom",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
+    "pr": "prettier -w ./src"
+  },
   "devDependencies": {
+    "prettier": "^2.7.1",
+    "prettier-plugin-tailwindcss": "^0.1.12",
     "tailwindcss": "^3.1.6"
   }
 }
