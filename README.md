@@ -1,3 +1,1 @@
-npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch
-
-yarn prettier -w ./src
+設計稿https://xd.adobe.com/view/a48b8617-4588-4817-9062-b62130dce916-f1d8/
