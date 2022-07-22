@@ -2,24 +2,30 @@ const productList = document.querySelector('.js-productList')
 const userApi = 'https://livejs-api.hexschool.io/api/livejs/v1/customer/todelusion'
 const category = document.querySelector('.js-category')
 
-const init = async function(){
-renderData()
+
+init()
+
+async function init(){
+  getApi()
+  renderData()
+
 }
 
-const getApi = async function(){
+async function getApi(){
   let res = await axios.get(`${userApi}/products`)
   let data = res.data.products
+  console.log(data)
   return data
 }
 
-const renderData = async function(){
+
+async function renderData(){
   let apiProductlist = ''
   let data = await getApi()
-  console.log(data)
   data.forEach((element) => {
     //依照switchCategory() function return的值顯示或消失
     let str = `
-    <li class="${switchCategory()}">
+    <li data-category="${element.category}">
     <div class="relative">
       <p class="py-2 px-6 bg-black text-white w-max absolute -right-1 top-4">新品</p>
       <img src=${element.images} alt="" class="w-64 object-cover">
@@ -35,25 +41,31 @@ const renderData = async function(){
     apiProductlist += str
   })
   productList.innerHTML = apiProductlist
-  return apiProductlist
+  return data
 }
-const switchCategory = async function(){
-  let switchData = await getApi()
-  console.log(switchData)
-  // return
-  // if(category.value == "all"){
-  //   console.log('all')
-  // }
-  // if(category.value == "床架"){
-  //   console.log('床架')
-  // }
-  // if(category.value == "收納"){
-  //   console.log('收納')
-  // }
-  // if(category.value == "窗簾"){
-  //   console.log('窗簾')
-  // } 
+function switchCategory(){
+  let li = productList.querySelectorAll('li')
+  li.forEach((item) => {
+    let DOMcategory = item.getAttribute("data-category")
+    if(category.value == "all"){
+      item.setAttribute('class','block')
+    }else {
+      item.setAttribute('class','hidden')
+    }
+    if(category.value == "床架" && DOMcategory == "床架"){
+      item.removeAttribute('class')
+      console.log(item)
+    }
+    if(category.value == "收納" && DOMcategory == "收納"){
+      item.removeAttribute('class')
+      console.log(item)
+    }
+    if(category.value == "窗簾" && DOMcategory == "窗簾"){
+      item.removeAttribute('class')
+      console.log(item)
+    }
+    
+  })
 }
-renderData()
 
-//現在做到
+//抓DOM判斷符合特定條件才能顯示的物件
