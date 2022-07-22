@@ -273,11 +273,11 @@
     </section>
     <section class="flex justify-center mb-16">
       <div class="container">    
-        <select name="product" class="mb-10 w-64 border-2">
-          <option value="">全部</option>
-          <option value="">床架</option>
-          <option value="">收納</option>
-          <option value="">窗簾</option>
+        <select name="product" onchange="switchCategory()" class="js-category mb-10 w-64 border-2">
+          <option value="all">全部</option>
+          <option value="床架">床架</option>
+          <option value="收納">收納</option>
+          <option value="窗簾">窗簾</option>
         </select>
         <ul class="js-productList grid grid-cols-4 gap-8">
         </ul>
