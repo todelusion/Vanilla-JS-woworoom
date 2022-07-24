@@ -1,31 +1,36 @@
 const productList = document.querySelector('.js-productList')
 const userApi = 'https://livejs-api.hexschool.io/api/livejs/v1/customer/todelusion'
 const category = document.querySelector('.js-category')
-
+const cartList = document.querySelector('.js-cartList')
 
 init()
+featureCart()
 
-async function init(){
-  getApi()
-  renderData()
-
+function init(){
+  getProducts()
+  renderProducts()
 }
 
-async function getApi(){
+function featureCart(){
+  getCarts()
+  renderCarts()
+  addToCart()
+}
+
+async function getProducts(){
   let res = await axios.get(`${userApi}/products`)
   let data = res.data.products
-  console.log(data)
   return data
 }
 
 
-async function renderData(){
+async function renderProducts(){
   let apiProductlist = ''
-  let data = await getApi()
+  let data = await getProducts()
   data.forEach((element) => {
     //依照switchCategory() function return的值顯示或消失
     let str = `
-    <li data-category="${element.category}">
+    <li data-id="${element.id}" data-category="${element.category}">
     <div class="relative">
       <p class="py-2 px-6 bg-black text-white w-max absolute -right-1 top-4">新品</p>
       <img src=${element.images} alt="" class="w-64 object-cover">
@@ -41,8 +46,49 @@ async function renderData(){
     apiProductlist += str
   })
   productList.innerHTML = apiProductlist
+  return productList
+}
+
+async function getCarts(){
+  let res = await axios.get(`${userApi}/carts`)
+  let data = res.data.carts
   return data
 }
+
+async function renderCarts(){
+  let apiCartList = ''
+  let carts = await getCarts()
+  console.log(carts)
+  carts.forEach(item => {
+    let str = `
+    <td class="flex items-center pb-5 w-max"><img src="${item.product.images}" alt="image" width="80"></td>
+    <td class="pb-5">${item.product.description}</td>
+    <td class="pb-5 px-5">${item.product.price}</td>
+    <td class="pb-5 px-5">${item.quantity}</td>
+    <td class="pb-5 px-5">${item.quantity * item.product.price}</td>
+    <td class="icon-delete text-center"><i class="fa-solid fa-x"></i></td>
+    `
+    apiCartList += str
+  })
+  cartList.innerHTML = apiCartList
+}
+
+
+async function addToCart(){
+  const productList = await renderProducts()
+  const li = productList.querySelectorAll('li') 
+  const addToCart = productList.querySelectorAll('.js-addToCart')
+  let cartListArr = []
+  addToCart.forEach((item, index) => {
+    item.addEventListener('click', () => {
+      dataID = li[index].getAttribute('data-id')
+      cartListArr.push(dataID)
+      console.log(cartListArr)
+    })
+  })
+}
+
+
 function switchCategory(){
   let li = productList.querySelectorAll('li')
   li.forEach((item) => {
@@ -54,18 +100,12 @@ function switchCategory(){
     }
     if(category.value == "床架" && DOMcategory == "床架"){
       item.removeAttribute('class')
-      console.log(item)
     }
     if(category.value == "收納" && DOMcategory == "收納"){
       item.removeAttribute('class')
-      console.log(item)
     }
     if(category.value == "窗簾" && DOMcategory == "窗簾"){
       item.removeAttribute('class')
-      console.log(item)
     }
-    
   })
 }
-
-//抓DOM判斷符合特定條件才能顯示的物件

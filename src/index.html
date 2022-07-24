@@ -301,13 +301,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="border-b-2 border-gray-300">
+          <tr class="js-cartList border-b-2 border-gray-300">
             <td class="flex items-center pb-5 w-max"><img src="./image/oJb4G1d.png" alt=""></td>
             <td class="pb-5">Antony 雙人床架／雙人加大</td>
             <td class="pb-5 px-5">NT$12,000</td>
             <td class="pb-5 px-5">1</td>
             <td class="pb-5 px-5">NT$12,000</td>
-            <td class="text-center"><i class="fa-solid fa-x"></i></td>
+            <td class="icon-delete text-center"><i class="fa-solid fa-x"></i></td>
           </tr>
         </tbody>
       </table>
@@ -323,5 +323,13 @@
     background-size: cover;
     background-position: center center;
   }
+  .fa-x {
+    display: none;
+  }
+  .icon-delete:hover > .fa-x {
+    display: block;
+    cursor: pointer;
+  }
+
 </style>
 
