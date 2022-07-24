@@ -29,7 +29,7 @@ async function renderData(){
     <div class="relative">
       <p class="py-2 px-6 bg-black text-white w-max absolute -right-1 top-4">新品</p>
       <img src=${element.images} alt="" class="w-64 object-cover">
-      <p class="py-2 px-6 bg-black text-white text-center">加入購物車</p>
+      <p class="js-addToCart py-2 px-6 bg-black text-white text-center cursor-pointer hover:bg-primary">加入購物車</p>
     </div>
     <div>
       <h3 class="text-lg text-ellipsis">${element.title}</h3>
