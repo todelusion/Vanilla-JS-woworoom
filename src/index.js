@@ -12,7 +12,7 @@ function productInit(){
   renderProducts()
 }
 
-function cartInit(){
+async function cartInit(){
   getCarts()
   renderCarts()
   addToCart()
@@ -73,23 +73,17 @@ function switchCategory(){
 
 
 async function getCarts(){
-  let localCarts = []
   let res = await axios.get(`${userApi}/carts`)
   let data = res.data.carts
-  data.forEach(item => {
-    for(let i=0; i<item.quantity; i++){
-      localCarts.push(item.id)
-    }
-  })
-  return [data, localCarts]
+  return data
 }
 
 async function renderCarts(){
-  let [ carts, localCarts ] = await getCarts()
+  let carts = await getCarts()
   let apiCartList = ''
   carts.forEach(item => {
     let str = `
-    <tr class="border-b-2 border-gray-300">
+    <tr class="border-b-2 border-gray-300" data-id="${item.id}">
       <td class="flex items-center pb-5 w-max"><img src="${item.product.images}" alt="image" width="80"></td>
       <td class="pb-5">${item.product.title}</td>
       <td class="pb-5 px-5">${item.product.price}</td>
@@ -109,8 +103,13 @@ async function addToCart(){
   const productList = await renderProducts()
   const li = productList.querySelectorAll('li') 
   const addToCart = productList.querySelectorAll('.js-addToCart')
-  let [ carts, localCarts ] = await getCarts()
-
+  const carts = await getCarts()
+  let localCarts = []
+  carts.forEach(item => {
+    for(let i=0; i<item.quantity; i++){
+      localCarts.push(item.product.id)
+    }
+  })
   //宣告－加入購物車
   //使用函式帶入參數，追蹤點擊事件的數值變化，例如apiCartPost 函式
   const apiPostCart = async(item, dataIDcalc) => {
@@ -139,7 +138,6 @@ async function addToCart(){
       }
       return obj
     },{})
-    console.log(dataIDcalc)
     return dataIDcalc
   }
 
@@ -164,6 +162,7 @@ async function addToCart(){
       }
     })
   })
+  return localCarts
 }
 
 clearCartsAllBtn.addEventListener('click', async() => {
