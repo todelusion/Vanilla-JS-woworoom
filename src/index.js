@@ -79,6 +79,7 @@ async function addToCart(){
   const li = productList.querySelectorAll('li') 
   const addToCart = productList.querySelectorAll('.js-addToCart')
   let cartListArr = []
+  console.log(li)
   addToCart.forEach((item, index) => {
     item.addEventListener('click', () => {
       dataID = li[index].getAttribute('data-id')
