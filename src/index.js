@@ -87,7 +87,13 @@ async function renderCarts(){
       <td class="flex items-center pb-5 w-max"><img src="${item.product.images}" alt="image" width="80"></td>
       <td class="pb-5">${item.product.title}</td>
       <td class="pb-5 px-5">${item.product.price}</td>
-      <td class="pb-5 px-5">${item.quantity}</td>
+      <td class="pb-5 px-2">
+        <div class="w-max cursor-default">
+          <button class="inline w-min"><i class="fa-solid fa-plus text-sm"></i></button>
+          <p class="w-min inline mx-3 cursor-default">${item.quantity}</p>
+          <button class="inline w-min"><i class="fa-solid fa-plus text-sm"></i></button>
+        </div>
+      </td>
       <td class="pb-5 px-5">${item.quantity * item.product.price}</td>
       <td class="icon-delete text-center"><i class="fa-solid fa-x"></i></td>
     </tr>
