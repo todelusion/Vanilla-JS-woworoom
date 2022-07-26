@@ -4,15 +4,15 @@ const category = document.querySelector('.js-category')
 const cartList = document.querySelector('.js-cartList')
 const clearCartsAllBtn = document.querySelector('.js-clearCartsAll')
 
-init()
-featureCart()
+productInit()
+cartInit()
 
-function init(){
+function productInit(){
   getProducts()
   renderProducts()
 }
 
-function featureCart(){
+function cartInit(){
   getCarts()
   renderCarts()
   addToCart()
@@ -84,29 +84,21 @@ async function getCarts(){
   return [data, localCarts]
 }
 
-async function renderCarts(dataIDcalc){
+async function renderCarts(){
   let [ carts, localCarts ] = await getCarts()
   let apiCartList = ''
   carts.forEach(item => {
-    for(let key in dataIDcalc){
-      // console.log(dataIDcalc)
-      console.log(key)
-      // console.log(item.id)
-      if(key === item.id){
-        let str = `
-        <tr class="border-b-2 border-gray-300">
-          <td class="flex items-center pb-5 w-max"><img src="${item.product.images}" alt="image" width="80"></td>
-          <td class="pb-5">${item.product.title}</td>
-          <td class="pb-5 px-5">${item.product.price}</td>
-          <td class="pb-5 px-5">${dataIDcalc[key]}</td>
-          <td class="pb-5 px-5">${dataIDcalc[key] * item.product.price}</td>
-          <td class="icon-delete text-center"><i class="fa-solid fa-x"></i></td>
-        </tr>
-        `
-        apiCartList += str
-      }
-    }
-
+    let str = `
+    <tr class="border-b-2 border-gray-300">
+      <td class="flex items-center pb-5 w-max"><img src="${item.product.images}" alt="image" width="80"></td>
+      <td class="pb-5">${item.product.title}</td>
+      <td class="pb-5 px-5">${item.product.price}</td>
+      <td class="pb-5 px-5">${item.quantity}</td>
+      <td class="pb-5 px-5">${item.quantity * item.product.price}</td>
+      <td class="icon-delete text-center"><i class="fa-solid fa-x"></i></td>
+    </tr>
+    `
+    apiCartList += str
   })
   cartList.innerHTML = apiCartList
   return true
@@ -118,23 +110,22 @@ async function addToCart(){
   const li = productList.querySelectorAll('li') 
   const addToCart = productList.querySelectorAll('.js-addToCart')
   let [ carts, localCarts ] = await getCarts()
-  // const dataIDarr = []
-  
+
   //宣告－加入購物車
   //使用函式帶入參數，追蹤點擊事件的數值變化，例如apiCartPost 函式
-  const apiPostCart = async(dataIDcalc) => {
+  const apiPostCart = async(item, dataIDcalc) => {
     for(let key in dataIDcalc){
-      let obj = {
-        data: {
-          productId: `${key}`,
-          quantity: dataIDcalc[key]
-        }
+      if(key == item){
+        let obj = {
+          data: {
+            productId: `${item}`,
+            quantity: dataIDcalc[key]
+          }
+        }  
+        let res = await axios.post(`${userApi}/carts`, obj)
+        let isDone = res.status === 200 ? true : false
+        return isDone
       }
-      
-
-      let res = await axios.post(`${userApi}/carts`, obj)
-      let isDone = res.status === 200 ? true : false
-      return isDone
     }
   }
 
@@ -148,6 +139,7 @@ async function addToCart(){
       }
       return obj
     },{})
+    console.log(dataIDcalc)
     return dataIDcalc
   }
 
@@ -158,24 +150,33 @@ async function addToCart(){
       const dataID = li[index].getAttribute('data-id')
       localCarts.push(dataID)
       const dataIDcalc = await calcFunc()
-      let isDone = await apiPostCart(dataIDcalc)
-      console.log(isDone)
-      renderCarts(dataIDcalc)
-      // if(res === true ){
-      //   location.reload()
-      // }else {
-      //   return
-      // }
+      let isDone = await apiPostCart(dataID, dataIDcalc)
+      if(isDone === true ){
+        Swal.fire({
+          position: 'center', icon: 'success',
+          title: '新增成功',
+          showConfirmButton: false,
+          timer: 5000
+        });
+        renderCarts()
+      }else {
+        return
+      }
     })
   })
 }
 
-clearCartsAllBtn.addEventListener('click', () => {
-  axios.delete(`${userApi}/carts`)
-  .then(res => {
-    location.reload()
-  })
-  .catch(err => console.log(err))
+clearCartsAllBtn.addEventListener('click', async() => {
+  let res = await axios.delete(`${userApi}/carts`)
+  if(res.status === 200){
+    Swal.fire({
+      position: 'center', icon: 'success',
+      title: '全部刪除',
+      showConfirmButton: false,
+      timer: 5000
+    });
+    cartInit()
+  }
 })
 
 
