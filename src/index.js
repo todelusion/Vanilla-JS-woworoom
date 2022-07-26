@@ -2,6 +2,7 @@ const productList = document.querySelector('.js-productList')
 const userApi = 'https://livejs-api.hexschool.io/api/livejs/v1/customer/todelusion'
 const category = document.querySelector('.js-category')
 const cartList = document.querySelector('.js-cartList')
+const clearCartsAllBtn = document.querySelector('.js-clearCartsAll')
 
 init()
 featureCart()
@@ -49,47 +50,6 @@ async function renderProducts(){
   return productList
 }
 
-async function getCarts(){
-  let res = await axios.get(`${userApi}/carts`)
-  let data = res.data.carts
-  return data
-}
-
-async function renderCarts(){
-  let apiCartList = ''
-  let carts = await getCarts()
-  console.log(carts)
-  carts.forEach(item => {
-    let str = `
-    <td class="flex items-center pb-5 w-max"><img src="${item.product.images}" alt="image" width="80"></td>
-    <td class="pb-5">${item.product.description}</td>
-    <td class="pb-5 px-5">${item.product.price}</td>
-    <td class="pb-5 px-5">${item.quantity}</td>
-    <td class="pb-5 px-5">${item.quantity * item.product.price}</td>
-    <td class="icon-delete text-center"><i class="fa-solid fa-x"></i></td>
-    `
-    apiCartList += str
-  })
-  cartList.innerHTML = apiCartList
-}
-
-
-async function addToCart(){
-  const productList = await renderProducts()
-  const li = productList.querySelectorAll('li') 
-  const addToCart = productList.querySelectorAll('.js-addToCart')
-  let cartListArr = []
-  console.log(li)
-  addToCart.forEach((item, index) => {
-    item.addEventListener('click', () => {
-      dataID = li[index].getAttribute('data-id')
-      cartListArr.push(dataID)
-      console.log(cartListArr)
-    })
-  })
-}
-
-
 function switchCategory(){
   let li = productList.querySelectorAll('li')
   li.forEach((item) => {
@@ -110,3 +70,94 @@ function switchCategory(){
     }
   })
 }
+
+
+async function getCarts(){
+  let res = await axios.get(`${userApi}/carts`)
+  let data = res.data.carts
+  return data
+}
+
+async function renderCarts(){
+  let apiCartList = ''
+  let carts = await getCarts()
+  console.log(carts)
+  carts.forEach(item => {
+    let str = `
+    <tr class="border-b-2 border-gray-300">
+      <td class="flex items-center pb-5 w-max"><img src="${item.product.images}" alt="image" width="80"></td>
+      <td class="pb-5">${item.product.title}</td>
+      <td class="pb-5 px-5">${item.product.price}</td>
+      <td class="pb-5 px-5">${item.quantity}</td>
+      <td class="pb-5 px-5">${item.quantity * item.product.price}</td>
+      <td class="icon-delete text-center"><i class="fa-solid fa-x"></i></td>
+    </tr>
+    `
+    apiCartList += str
+  })
+  cartList.innerHTML = apiCartList
+  return true
+}
+
+async function addToCart(){
+  const productList = await renderProducts()
+  const li = productList.querySelectorAll('li') 
+  const addToCart = productList.querySelectorAll('.js-addToCart')
+  const dataIDarr = []
+  
+  //宣告－加入購物車
+  //使用函式帶入參數，追蹤點擊事件的數值變化，例如apiCartPost 函式
+  const apiPostCart = async(dataIDcalc) => {
+    console.log(dataIDcalc)
+    for(let key in dataIDcalc){
+      let obj = {
+        data: {
+          productId: `${key}`,
+          quantity: dataIDcalc[key]
+        }
+      }
+      let res = await axios.post(`${userApi}/carts`, obj)
+      return res.status === 200 ? true : false
+    }
+  }
+
+  //宣告－計算重複商品
+  const calcFunc = () => {
+    const dataIDcalc = dataIDarr.reduce((obj,item) => {
+      if(item in obj){
+        obj[item]++
+      }else{
+        obj[item] = 1
+      }
+      return obj
+    },{})
+    return dataIDcalc
+  }
+
+  
+  //執行－加入購物車
+  addToCart.forEach((item, index) => {
+    item.addEventListener('click', async() => {
+      const dataID = li[index].getAttribute('data-id')
+      dataIDarr.push(dataID)
+      const dataIDcalc = calcFunc()
+      let res = await apiPostCart(dataIDcalc)
+      if(res === true ){
+        location.reload()
+      }else {
+        return
+      }
+    })
+  })
+}
+
+clearCartsAllBtn.addEventListener('click', () => {
+  axios.delete(`${userApi}/carts`)
+  .then(res => {
+    location.reload()
+  })
+  .catch(err => console.log(err))
+})
+
+
+
