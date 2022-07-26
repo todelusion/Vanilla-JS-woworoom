@@ -73,42 +73,56 @@ function switchCategory(){
 
 
 async function getCarts(){
+  let localCarts = []
   let res = await axios.get(`${userApi}/carts`)
   let data = res.data.carts
-  return data
+  data.forEach(item => {
+    for(let i=0; i<item.quantity; i++){
+      localCarts.push(item.id)
+    }
+  })
+  return [data, localCarts]
 }
 
-async function renderCarts(){
+async function renderCarts(dataIDcalc){
+  let [ carts, localCarts ] = await getCarts()
   let apiCartList = ''
-  let carts = await getCarts()
-  console.log(carts)
   carts.forEach(item => {
-    let str = `
-    <tr class="border-b-2 border-gray-300">
-      <td class="flex items-center pb-5 w-max"><img src="${item.product.images}" alt="image" width="80"></td>
-      <td class="pb-5">${item.product.title}</td>
-      <td class="pb-5 px-5">${item.product.price}</td>
-      <td class="pb-5 px-5">${item.quantity}</td>
-      <td class="pb-5 px-5">${item.quantity * item.product.price}</td>
-      <td class="icon-delete text-center"><i class="fa-solid fa-x"></i></td>
-    </tr>
-    `
-    apiCartList += str
+    for(let key in dataIDcalc){
+      // console.log(dataIDcalc)
+      console.log(key)
+      // console.log(item.id)
+      if(key === item.id){
+        let str = `
+        <tr class="border-b-2 border-gray-300">
+          <td class="flex items-center pb-5 w-max"><img src="${item.product.images}" alt="image" width="80"></td>
+          <td class="pb-5">${item.product.title}</td>
+          <td class="pb-5 px-5">${item.product.price}</td>
+          <td class="pb-5 px-5">${dataIDcalc[key]}</td>
+          <td class="pb-5 px-5">${dataIDcalc[key] * item.product.price}</td>
+          <td class="icon-delete text-center"><i class="fa-solid fa-x"></i></td>
+        </tr>
+        `
+        apiCartList += str
+      }
+    }
+
   })
   cartList.innerHTML = apiCartList
   return true
 }
 
+
 async function addToCart(){
   const productList = await renderProducts()
   const li = productList.querySelectorAll('li') 
   const addToCart = productList.querySelectorAll('.js-addToCart')
-  const dataIDarr = []
+  let [ carts, localCarts ] = await getCarts()
+  // const dataIDarr = []
   
   //宣告－加入購物車
   //使用函式帶入參數，追蹤點擊事件的數值變化，例如apiCartPost 函式
   const apiPostCart = async(dataIDcalc) => {
-    console.log(dataIDcalc)
     for(let key in dataIDcalc){
       let obj = {
         data: {
@@ -116,14 +130,17 @@ async function addToCart(){
           quantity: dataIDcalc[key]
         }
       }
+      
+
       let res = await axios.post(`${userApi}/carts`, obj)
-      return res.status === 200 ? true : false
+      let isDone = res.status === 200 ? true : false
+      return isDone
     }
   }
 
   //宣告－計算重複商品
-  const calcFunc = () => {
-    const dataIDcalc = dataIDarr.reduce((obj,item) => {
+  const calcFunc = async() => {
+    const dataIDcalc = localCarts.reduce((obj,item) => {
       if(item in obj){
         obj[item]++
       }else{
@@ -139,14 +156,16 @@ async function addToCart(){
   addToCart.forEach((item, index) => {
     item.addEventListener('click', async() => {
       const dataID = li[index].getAttribute('data-id')
-      dataIDarr.push(dataID)
-      const dataIDcalc = calcFunc()
-      let res = await apiPostCart(dataIDcalc)
-      if(res === true ){
-        location.reload()
-      }else {
-        return
-      }
+      localCarts.push(dataID)
+      const dataIDcalc = await calcFunc()
+      let isDone = await apiPostCart(dataIDcalc)
+      console.log(isDone)
+      renderCarts(dataIDcalc)
+      // if(res === true ){
+      //   location.reload()
+      // }else {
+      //   return
+      // }
     })
   })
 }
