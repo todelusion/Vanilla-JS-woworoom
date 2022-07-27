@@ -16,6 +16,7 @@ async function cartInit(){
   getCarts()
   renderCarts()
   addToCart()
+  cartsQuantity()
 }
 
 async function getProducts(){
@@ -88,10 +89,10 @@ async function renderCarts(){
       <td class="pb-5">${item.product.title}</td>
       <td class="pb-5 px-5">${item.product.price}</td>
       <td class="pb-5 px-2">
-        <div class="w-max cursor-default">
-          <button class="inline w-min"><i class="fa-solid fa-plus text-sm"></i></button>
-          <p class="w-min inline mx-3 cursor-default">${item.quantity}</p>
-          <button class="inline w-min"><i class="fa-solid fa-plus text-sm"></i></button>
+        <div class="js-quantity w-max cursor-default">
+          <i class="fa-solid fa-minus text-sm cursor-pointer"></i>
+          <p data-quantity="quantityValue" class="w-min inline mx-3 cursor-default">${item.quantity}</p>
+          <i class="fa-solid fa-plus text-sm cursor-pointer"></i>
         </div>
       </td>
       <td class="pb-5 px-5">${item.quantity * item.product.price}</td>
@@ -101,8 +102,32 @@ async function renderCarts(){
     apiCartList += str
   })
   cartList.innerHTML = apiCartList
-  return true
+  return cartList
 }
+
+async function cartsQuantity(){
+  const cartList = await renderCarts()
+  const quantity = cartList.querySelectorAll('.js-quantity')
+  console.log(quantity)
+
+  quantity.forEach(item => {
+    item.addEventListener('click', (e) => {
+      let calcArr = Object.values(e.target.classList)
+      let p = item.getElementsByTagName('p')
+      let pValue = Object.values(p)[0].textContent
+      if(calcArr.includes('fa-plus')){
+        //注意數值型別
+        console.log('plus')
+        console.log(typeof pValue)
+      }
+      if(calcArr.includes('fa-minus')){
+        console.log('minus')
+      }
+    })
+  })
+  
+}
+
 
 
 async function addToCart(){
