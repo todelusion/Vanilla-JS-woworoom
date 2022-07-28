@@ -12,11 +12,11 @@ function productInit(){
   renderProducts()
 }
 
-async function cartInit(){
+function cartInit(){
   getCarts()
   renderCarts()
   addToCart()
-  cartsQuantity()
+  // cartsQuantity()
 }
 
 async function getProducts(){
@@ -79,8 +79,15 @@ async function getCarts(){
   return data
 }
 
-async function renderCarts(){
-  let carts = await getCarts()
+async function renderCarts(data){
+  console.log(data) 
+  let carts
+  if(data){
+    carts = data.carts
+  }else{
+    carts = await getCarts()
+  }
+  console.log(carts)
   let apiCartList = ''
   carts.forEach(item => {
     let str = `
@@ -102,32 +109,75 @@ async function renderCarts(){
     apiCartList += str
   })
   cartList.innerHTML = apiCartList
+  // cartsQuantity()
   return cartList
 }
+
+// 增減購物車數量
+cartList.addEventListener('click', async(e)=>{
+  const cartList = await renderCarts()
+  const quantity = cartList.querySelectorAll('.js-quantity')
+  quantity.forEach(item => {
+    let p = item.getElementsByTagName('p')
+    let cartID = item.parentNode.parentNode.getAttribute('data-id')
+    let quantityValue = parseInt(Object.values(p)[0].textContent)
+    console.log(e.target.classList)
+
+    if(e.target.className == 'fa-plus'){
+      ++ quantityValue
+    }
+    if(e.target.className == 'fa-minus'){
+      quantityValue>1 ? -- quantityValue : alert('數量至少要一個')
+    }
+    console.log(quantityValue)
+    // let res = await apiPatchCart(cartID, quantityValue)
+    // renderCarts(res.data)
+  })
+})
+
+
+//OLD 增減購物車數量
 
 async function cartsQuantity(){
   const cartList = await renderCarts()
   const quantity = cartList.querySelectorAll('.js-quantity')
-  console.log(quantity)
 
   quantity.forEach(item => {
-    item.addEventListener('click', (e) => {
+    let p = item.getElementsByTagName('p')
+    let cartID = item.parentNode.parentNode.getAttribute('data-id')
+    let quantityValue = parseInt(Object.values(p)[0].textContent)
+
+    item.addEventListener('click', async(e) => {
+      console.log('test')
+      console.log(e.target.className.content)
       let calcArr = Object.values(e.target.classList)
-      let p = item.getElementsByTagName('p')
-      let pValue = Object.values(p)[0].textContent
       if(calcArr.includes('fa-plus')){
         //注意數值型別
-        console.log('plus')
-        console.log(typeof pValue)
+        ++ quantityValue
       }
       if(calcArr.includes('fa-minus')){
-        console.log('minus')
+        quantityValue>1 ? -- quantityValue : alert('數量至少要一個')
       }
+      let res = await apiPatchCart(cartID, quantityValue)
+      renderCarts(res.data)
     })
   })
   
 }
 
+
+// API Carts Patch
+async function apiPatchCart(dataID, dataQuantity){
+  let obj = {
+    data: {
+      id: dataID,
+      quantity: dataQuantity
+    }
+  }
+  console.log(obj)
+  let res = await axios.patch(`${userApi}/carts`, obj)
+  return res
+}
 
 
 async function addToCart(){
@@ -142,7 +192,7 @@ async function addToCart(){
     }
   })
   //宣告－加入購物車
-  //使用函式帶入參數，追蹤點擊事件的數值變化，例如apiCartPost 函式
+  //將函式帶入參數，追蹤點擊事件的數值變化，例如apiCartPost 函式
   const apiPostCart = async(item, dataIDcalc) => {
     for(let key in dataIDcalc){
       if(key == item){
@@ -188,6 +238,7 @@ async function addToCart(){
           timer: 5000
         });
         renderCarts()
+        cartsQuantity()
       }else {
         return
       }
