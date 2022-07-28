@@ -80,14 +80,12 @@ async function getCarts(){
 }
 
 async function renderCarts(data){
-  console.log(data) 
   let carts
   if(data){
     carts = data.carts
   }else{
     carts = await getCarts()
   }
-  console.log(carts)
   let apiCartList = ''
   carts.forEach(item => {
     let str = `
@@ -115,55 +113,37 @@ async function renderCarts(data){
 
 // 增減購物車數量
 cartList.addEventListener('click', async(e)=>{
-  const cartList = await renderCarts()
-  const quantity = cartList.querySelectorAll('.js-quantity')
-  quantity.forEach(item => {
-    let p = item.getElementsByTagName('p')
-    let cartID = item.parentNode.parentNode.getAttribute('data-id')
-    let quantityValue = parseInt(Object.values(p)[0].textContent)
-    console.log(e.target.classList)
+  let cartID = e.target.parentNode.parentNode.parentNode.getAttribute('data-id')
+  let quantityValue = Object.values(e.target.parentNode.getElementsByTagName('p'))[0].textContent
+  let classListArr = Object.values(e.target.classList)
 
-    if(e.target.className == 'fa-plus'){
+  // async function search(){
+  //   quantity.forEach((item) => {
+  //     p = item.getElementsByTagName('p')
+  //     cartID = item.parentNode.parentNode.getAttribute('data-id')
+  //     quantityValue = parseInt(Object.values(p)[0].textContent)
+  //     classListArr = Object.values(e.target.classList)
+  //   })
+  // }
+  if(classListArr.includes('fa-plus') || classListArr.includes('fa-minus')){
+    if(classListArr.includes('fa-plus')){
       ++ quantityValue
     }
-    if(e.target.className == 'fa-minus'){
+    if(classListArr.includes('fa-minus')){
       quantityValue>1 ? -- quantityValue : alert('數量至少要一個')
     }
-    console.log(quantityValue)
-    // let res = await apiPatchCart(cartID, quantityValue)
-    // renderCarts(res.data)
-  })
-})
-
-
-//OLD 增減購物車數量
-
-async function cartsQuantity(){
-  const cartList = await renderCarts()
-  const quantity = cartList.querySelectorAll('.js-quantity')
-
-  quantity.forEach(item => {
-    let p = item.getElementsByTagName('p')
-    let cartID = item.parentNode.parentNode.getAttribute('data-id')
-    let quantityValue = parseInt(Object.values(p)[0].textContent)
-
-    item.addEventListener('click', async(e) => {
-      console.log('test')
-      console.log(e.target.className.content)
-      let calcArr = Object.values(e.target.classList)
-      if(calcArr.includes('fa-plus')){
-        //注意數值型別
-        ++ quantityValue
-      }
-      if(calcArr.includes('fa-minus')){
-        quantityValue>1 ? -- quantityValue : alert('數量至少要一個')
-      }
-      let res = await apiPatchCart(cartID, quantityValue)
-      renderCarts(res.data)
+    let res = await apiPatchCart(cartID, quantityValue)
+    Swal.fire({
+      position: 'center', icon: 'success',
+      title: '修改成功',
+      showConfirmButton: false,
+      timer: 5000
     })
-  })
-  
-}
+    if(res.status === 200){
+      renderCarts(res.data)
+    }
+  }
+})
 
 
 // API Carts Patch
@@ -174,7 +154,6 @@ async function apiPatchCart(dataID, dataQuantity){
       quantity: dataQuantity
     }
   }
-  console.log(obj)
   let res = await axios.patch(`${userApi}/carts`, obj)
   return res
 }
@@ -184,13 +163,7 @@ async function addToCart(){
   const productList = await renderProducts()
   const li = productList.querySelectorAll('li') 
   const addToCart = productList.querySelectorAll('.js-addToCart')
-  const carts = await getCarts()
-  let localCarts = []
-  carts.forEach(item => {
-    for(let i=0; i<item.quantity; i++){
-      localCarts.push(item.product.id)
-    }
-  })
+
   //宣告－加入購物車
   //將函式帶入參數，追蹤點擊事件的數值變化，例如apiCartPost 函式
   const apiPostCart = async(item, dataIDcalc) => {
@@ -210,7 +183,14 @@ async function addToCart(){
   }
 
   //宣告－計算重複商品
-  const calcFunc = async() => {
+  const calcFunc = async(localCarts) => {
+    const carts = await getCarts()
+    
+    carts.forEach(item => {
+      for(let i=0; i<item.quantity; i++){
+        localCarts.push(item.product.id)
+      }
+    })
     const dataIDcalc = localCarts.reduce((obj,item) => {
       if(item in obj){
         obj[item]++
@@ -227,8 +207,9 @@ async function addToCart(){
   addToCart.forEach((item, index) => {
     item.addEventListener('click', async() => {
       const dataID = li[index].getAttribute('data-id')
+      let localCarts = []
       localCarts.push(dataID)
-      const dataIDcalc = await calcFunc()
+      const dataIDcalc = await calcFunc(localCarts)
       let isDone = await apiPostCart(dataID, dataIDcalc)
       if(isDone === true ){
         Swal.fire({
@@ -238,7 +219,6 @@ async function addToCart(){
           timer: 5000
         });
         renderCarts()
-        cartsQuantity()
       }else {
         return
       }
