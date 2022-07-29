@@ -231,7 +231,18 @@ async function addToCart(){
 //移出購物車
 cartList.addEventListener('click', (e) => {
   if(e.target.classList.contains('fa-x')){
-    console.log(e.target.closest('tr').getAttribute('data-id'))
+    let cartID = e.target.closest('tr').getAttribute('data-id')
+    axios.delete(`${userApi}/carts/${cartID}`)
+    .then(res => {
+      Swal.fire({
+        position: 'center', icon: 'success',
+        title: `成功刪除`,
+        showConfirmButton: false,
+        timer: 5000
+      }
+      )
+      renderCarts()
+    })
   }
 })
 
