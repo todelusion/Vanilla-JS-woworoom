@@ -7,6 +7,7 @@ const clearCartsAllBtn = document.querySelector('.js-clearCartsAll')
 productInit()
 cartInit()
 
+
 function productInit(){
   getProducts()
   renderProducts()
@@ -111,35 +112,35 @@ async function renderCarts(data){
   return cartList
 }
 
-// 增減購物車數量
-cartList.addEventListener('click', async(e)=>{
-  let cartID = e.target.parentNode.parentNode.parentNode.getAttribute('data-id')
-  let quantityValue = Object.values(e.target.parentNode.getElementsByTagName('p'))[0].textContent
-  let classListArr = Object.values(e.target.classList)
 
+// 修改購物車數量
+cartList.addEventListener('click', async(e)=>{
+  let classListArr = Object.values(e.target.classList)
   // async function search(){
-  //   quantity.forEach((item) => {
-  //     p = item.getElementsByTagName('p')
-  //     cartID = item.parentNode.parentNode.getAttribute('data-id')
-  //     quantityValue = parseInt(Object.values(p)[0].textContent)
-  //     classListArr = Object.values(e.target.classList)
-  //   })
-  // }
+    //   quantity.forEach((item) => {
+      //     p = item.getElementsByTagName('p')
+      //     cartID = item.parentNode.parentNode.getAttribute('data-id')
+      //     quantityValue = parseInt(Object.values(p)[0].textContent)
+      //     classListArr = Object.values(e.target.classList)
+      //   })
+      // }
   if(classListArr.includes('fa-plus') || classListArr.includes('fa-minus')){
+    let cartID = e.target.parentNode.parentNode.parentNode.getAttribute('data-id')
+    let quantityValue = Object.values(e.target.parentNode.getElementsByTagName('p'))[0].textContent
     if(classListArr.includes('fa-plus')){
       ++ quantityValue
     }
     if(classListArr.includes('fa-minus')){
-      quantityValue>1 ? -- quantityValue : alert('數量至少要一個')
+      quantityValue>1 ? -- quantityValue : quantityValue=quantityValue
     }
     let res = await apiPatchCart(cartID, quantityValue)
-    Swal.fire({
-      position: 'center', icon: 'success',
-      title: '修改成功',
-      showConfirmButton: false,
-      timer: 5000
-    })
     if(res.status === 200){
+      Swal.fire({
+        position: 'center', icon: 'success',
+        title: '修改成功',
+        showConfirmButton: false,
+        timer: 5000
+      })
       renderCarts(res.data)
     }
   }
@@ -159,6 +160,7 @@ async function apiPatchCart(dataID, dataQuantity){
 }
 
 
+//加入購物車
 async function addToCart(){
   const productList = await renderProducts()
   const li = productList.querySelectorAll('li') 
@@ -224,9 +226,17 @@ async function addToCart(){
       }
     })
   })
-  return localCarts
 }
 
+//移出購物車
+cartList.addEventListener('click', (e) => {
+  if(e.target.classList.contains('fa-x')){
+    console.log(e.target.closest('tr').getAttribute('data-id'))
+  }
+})
+
+
+//清空購物車
 clearCartsAllBtn.addEventListener('click', async() => {
   let res = await axios.delete(`${userApi}/carts`)
   if(res.status === 200){
@@ -239,6 +249,7 @@ clearCartsAllBtn.addEventListener('click', async() => {
     cartInit()
   }
 })
+
 
 
 
