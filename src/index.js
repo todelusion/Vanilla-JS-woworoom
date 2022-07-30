@@ -3,6 +3,7 @@ const userApi = 'https://livejs-api.hexschool.io/api/livejs/v1/customer/todelusi
 const category = document.querySelector('.js-category')
 const cartList = document.querySelector('.js-cartList')
 const clearCartsAllBtn = document.querySelector('.js-clearCartsAll')
+const total = document.querySelector('.js-total')
 
 productInit()
 cartInit()
@@ -88,6 +89,7 @@ async function renderCarts(data){
     carts = await getCarts()
   }
   let apiCartList = ''
+  const cartsTotalArr = []
   carts.forEach(item => {
     let str = `
     <tr class="border-b-2 border-gray-300" data-id="${item.id}">
@@ -106,9 +108,10 @@ async function renderCarts(data){
     </tr>
     `
     apiCartList += str
+    cartsTotalArr.push(item.quantity * item.product.price)
   })
   cartList.innerHTML = apiCartList
-  // cartsQuantity()
+  cartsTotal(cartsTotalArr)
   return cartList
 }
 
@@ -262,5 +265,14 @@ clearCartsAllBtn.addEventListener('click', async() => {
 })
 
 
-
-
+//計算總額
+function cartsTotal(cartsTotalArr){
+  console.log(typeof cartsTotalArr)
+  if(cartsTotalArr.length > 0){
+    const cartsTotal = cartsTotalArr.reduce((a, b) => a + b)
+    total.textContent = `總金額：${cartsTotal}`
+  }else{
+    total.textContent = `總金額：0`  
+  }
+  
+}

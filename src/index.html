@@ -285,7 +285,7 @@
     </section>
     <section class="bg-[#F8F8F8] pt-12 pb-16 flex flex-col justify-center items-center">
       <table
-        class="text-left w-full table-fixed max-w-[920px] md:text-xl"
+        class="text-left w-full table-fixed max-w-[920px] md:text-xl mb-10"
       >
         <caption class="mb-8 text-3xl text-center">
           我的購物車
@@ -311,7 +311,10 @@
           </tr>
         </tbody>
       </table>
-      <button class="js-clearCartsAll bg-black text-white px-10 py-5 rounded-xl">清空購物車</button>
+      <div class="flex justify-between w-full max-w-[920px] items-center">
+        <button class="js-clearCartsAll bg-black text-white px-10 py-5 rounded-xl">清空購物車</button>
+        <h3 class="js-total text-xl">總金額</h3>
+      </div>
     </section>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js" integrity="sha512-xIPqqrfvUAc/Cspuj7Bq0UtHNo/5qkdyngx6Vwt+tmbvTLDszzXM0G6c91LXmGrRx8KEPulT+AfOOez+TeVylg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
