@@ -232,37 +232,43 @@
       <ul class="flex w-1/2 justify-evenly">
         <li class="text-center">
           <div
-            class="flex h-28 w-28 mb-2 items-center justify-center rounded-full border-4 border-black"
+            class="mb-2 flex h-28 w-28 items-center justify-center rounded-full border-4 border-black"
           >
             <i class="fa-solid fa-cart-shopping text-4xl"></i>
           </div>
           <p class="text-xl">STEP.1</p>
           <p>選購商品</p>
         </li>
-        <li class="h-28 flex items-center"><i class="fa-solid fa-caret-right text-2xl"></i></li>
+        <li class="flex h-28 items-center">
+          <i class="fa-solid fa-caret-right text-2xl"></i>
+        </li>
         <li class="text-center">
           <div
-            class="flex h-28 w-28 mb-2 items-center justify-center rounded-full border-4 border-black"
+            class="mb-2 flex h-28 w-28 items-center justify-center rounded-full border-4 border-black"
           >
-          <i class="fa-solid fa-list text-4xl"></i>
+            <i class="fa-solid fa-list text-4xl"></i>
           </div>
           <p class="text-xl">STEP.2</p>
           <p>填寫預定資料</p>
         </li>
-        <li class="h-28 flex items-center"><i class="fa-solid fa-caret-right text-2xl"></i></li>
+        <li class="flex h-28 items-center">
+          <i class="fa-solid fa-caret-right text-2xl"></i>
+        </li>
         <li class="text-center">
           <div
-            class="flex h-28 w-28 mb-2 items-center justify-center rounded-full border-4 border-black"
+            class="mb-2 flex h-28 w-28 items-center justify-center rounded-full border-4 border-black"
           >
             <i class="fa-solid fa-check text-4xl"></i>
           </div>
           <p class="text-xl">STEP.3</p>
           <p>預定成功</p>
         </li>
-        <li class="h-28 flex items-center"><i class="fa-solid fa-caret-right text-2xl"></i></li>
+        <li class="flex h-28 items-center">
+          <i class="fa-solid fa-caret-right text-2xl"></i>
+        </li>
         <li class="text-center">
           <div
-            class="flex h-28 w-28 mb-2 items-center justify-center rounded-full border-4 border-black"
+            class="mb-2 flex h-28 w-28 items-center justify-center rounded-full border-4 border-black"
           >
             <i class="fa-solid fa-envelope text-4xl"></i>
           </div>
@@ -271,52 +277,79 @@
         </li>
       </ul>
     </section>
-    <section class="flex justify-center mb-16">
-      <div class="container">    
-        <select name="product" onchange="switchCategory()" class="js-category mb-10 w-64 border-2">
+    <section class="mb-16 flex justify-center">
+      <div class="container">
+        <select
+          name="product"
+          onchange="switchCategory()"
+          class="js-category mb-10 w-64 border-2"
+        >
           <option value="all">全部</option>
           <option value="床架">床架</option>
           <option value="收納">收納</option>
           <option value="窗簾">窗簾</option>
         </select>
-        <ul class="js-productList grid grid-cols-4 gap-8">
-        </ul>
+        <ul class="js-productList grid grid-cols-4 gap-8"></ul>
       </div>
     </section>
-    <section class="bg-[#F8F8F8] pt-12 pb-16 flex flex-col justify-center items-center">
+    <section
+      class="flex flex-col items-center justify-center bg-[#F8F8F8] pt-12 pb-16"
+    >
       <table
-        class="text-left w-full table-fixed max-w-[920px] md:text-xl mb-10"
+        class="mb-10 w-full max-w-[920px] table-fixed text-left md:text-xl"
       >
-        <caption class="mb-8 text-3xl text-center">
+        <caption class="mb-8 text-center text-3xl">
           我的購物車
         </caption>
         <thead>
-          <tr class=" border-gray-300">
+          <tr class="border-gray-300">
             <th class="pb-5">品項</th>
             <th class="pb-5"></th>
-            <th class="pb-5 px-5">單價</th>
-            <th class="pb-5 px-5">數量</th>
-            <th class="pb-5 px-5">金額</th>
+            <th class="px-5 pb-5">單價</th>
+            <th class="px-5 pb-5">數量</th>
+            <th class="px-5 pb-5">金額</th>
             <th class="pb-5"></th>
           </tr>
         </thead>
         <tbody class="js-cartList">
           <tr class="border-b-2 border-gray-300">
-            <td class="flex items-center pb-5 w-max"><img src="./image/oJb4G1d.png" alt=""></td>
+            <td class="flex w-max items-center pb-5">
+              <img src="./image/oJb4G1d.png" alt="" />
+            </td>
             <td class="pb-5">Antony 雙人床架／雙人加大</td>
-            <td class="pb-5 px-5">NT$12,000</td>
-            <td class="pb-5 px-5">1</td>
-            <td class="pb-5 px-5">NT$12,000</td>
-            <td class="icon-delete text-center"><i class="fa-solid fa-x"></i></td>
+            <td class="px-5 pb-5">NT$12,000</td>
+            <td class="px-5 pb-5">1</td>
+            <td class="px-5 pb-5">NT$12,000</td>
+            <td class="icon-delete text-center">
+              <i class="fa-solid fa-x"></i>
+            </td>
           </tr>
         </tbody>
       </table>
-      <div class="flex justify-between w-full max-w-[920px] items-center">
-        <button class="js-clearCartsAll bg-black text-white px-10 py-5 rounded-xl">清空購物車</button>
+      <div class="mb-10 flex justify-between w-full max-w-[920px] items-center">
+        <button
+          class="js-clearCartsAll rounded-xl border-2 px-10 py-5 text-black duration-150 hover:bg-primary hover:text-white"
+        >
+          清空購物車
+        </button>
         <h3 class="js-total text-xl">總金額</h3>
       </div>
+      <button
+        class="js-submitCarts h-14 w-full max-w-[920px] rounded-xl bg-black text-white duration-150 hover:bg-primary"
+      >
+        提交訂單
+      </button>
     </section>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js" integrity="sha512-xIPqqrfvUAc/Cspuj7Bq0UtHNo/5qkdyngx6Vwt+tmbvTLDszzXM0G6c91LXmGrRx8KEPulT+AfOOez+TeVylg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <section
+      class="js-submitModal"
+    >
+    </section>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"
+      integrity="sha512-xIPqqrfvUAc/Cspuj7Bq0UtHNo/5qkdyngx6Vwt+tmbvTLDszzXM0G6c91LXmGrRx8KEPulT+AfOOez+TeVylg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="./index.js"></script>
   </body>
@@ -334,6 +367,4 @@
     display: block;
     cursor: pointer;
   }
-
 </style>
-
