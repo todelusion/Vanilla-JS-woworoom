@@ -142,7 +142,7 @@ cartList.addEventListener("click", async (e) => {
       ++quantityValue;
     }
     if (classListArr.includes("fa-minus")) {
-      quantityValue > 1 ? --quantityValue : (quantityValue = quantityValue);
+      quantityValue > 1 ? --quantityValue : quantityValue = quantityValue;
     }
     let res = await apiPatchCart(cartID, quantityValue);
     if (res.status === 200) {
@@ -270,7 +270,7 @@ clearCartsAllBtn.addEventListener("click", async () => {
   }
 });
 
-//計算總額
+//計算購物車總額
 function cartsTotal(cartsTotalArr) {
   if (cartsTotalArr.length > 0) {
     const cartsTotal = cartsTotalArr.reduce((a, b) => a + b);
@@ -280,20 +280,103 @@ function cartsTotal(cartsTotalArr) {
   }
 }
 
+
+/*  f/submit orders  */
+
 //宣告－關閉送出訂單視窗
 const closeModalfunc = () => {
   const closeModal = document.querySelector(".js-closeModal")
-  closeModal.addEventListener("click", (e) => {
-    console.log(e.target)
-  });
+  if(closeModal !== null){
+    closeModal.addEventListener("click", (e) => {
+      if(e.target.classList.contains("js-closeModal")){
+        showModal = !showModal
+        closeModal.remove()
+      }
+    })
+  }else {
+    return
+  }
+
 }
+
+//宣告－送出訂單
+const submitModalfunc = () => {
+  const closeModal = document.querySelector(".js-closeModal")
+  const submitOrders = document.querySelector(".js-submitOrders")
+  
+  submitOrders.addEventListener('click', (e) => {
+    const name = document.querySelector(".js-name").value
+    const tel = document.querySelector(".js-tel").value
+    const email = document.querySelector(".js-email").value
+    const address = document.querySelector(".js-address").value
+    const payment = document.querySelector(".js-payment").value
+  
+    const obj = {
+      data: {
+        user: {
+          name: "",
+          tel: "",
+          email: "",
+          address: "",
+          payment: ""
+        }
+      }
+    }
+    
+    if(name && tel && email && address && payment){
+      obj.data.user.name = name
+      obj.data.user.tel = tel
+      obj.data.user.email = email
+      obj.data.user.address = address
+      obj.data.user.payment = payment
+    }else{
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "還有資料沒填喔！",
+        showConfirmButton: false,
+        timer: 5000,
+      });
+      return
+    }
+
+    console.log(obj)
+
+    axios.post(`${userApi}/orders`, obj)
+    .then(res => {
+      console.log(res)
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "資料送出！",
+        showConfirmButton: false,
+        timer: 5000,
+      });
+      showModal = !showModal
+      closeModal.remove()
+    })
+    .catch(err => {
+      console.log(err)
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "資料格式有誤！",
+        showConfirmButton: false,
+        timer: 5000,
+      })
+    })
+  
+
+  })
+}
+  
 
 //宣告－顯示送出訂單視窗
 const showModalfunc= async () => {
   showModal = !showModal
   if(showModal == true){
     submitModal.innerHTML = `
-    <div class="js-closeModal fixed top-0 flex h-screen w-full flex-col items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div class="js-closeModal fixed top-0 flex h-screen w-full flex-col items-center justify-center bg-black/50">
       <div
           class="flex w-full max-w-xl flex-col items-center rounded-2xl bg-white py-14"
           >
@@ -305,7 +388,7 @@ const showModalfunc= async () => {
                   <input
                     type="text"
                     placeholder="請輸入姓名"
-                    class="block w-full rounded-lg border-2 px-3 py-2"
+                    class="js-name block w-full rounded-lg border-2 px-3 py-2"
                   />
                   <p class="absolute -right-12 top-1/2 text-red-600">必填</p>
                 </li>
@@ -314,7 +397,7 @@ const showModalfunc= async () => {
                   <input
                     type="tel"
                     placeholder="請輸入電話"
-                    class="block w-full rounded-lg border-2 px-3 py-2"
+                    class="js-tel block w-full rounded-lg border-2 px-3 py-2"
                   />
                   <p class="absolute -right-12 top-1/2 text-red-600">必填</p>
                 </li>
@@ -323,14 +406,23 @@ const showModalfunc= async () => {
                   <input
                     type="email"
                     placeholder="請輸入Email"
-                    class="block w-full rounded-lg border-2 px-3 py-2"
+                    class="js-email block w-full rounded-lg border-2 px-3 py-2"
+                  />
+                  <p class="absolute -right-12 top-1/2 text-red-600">必填</p>
+                </li>
+                <li class="relative mb-10 w-full">
+                  <label class="mb-2 block">寄送地址</label>
+                  <input
+                    type="text"
+                    placeholder="請輸入寄送地址"
+                    class="js-address block w-full rounded-lg border-2 px-3 py-2"
                   />
                   <p class="absolute -right-12 top-1/2 text-red-600">必填</p>
                 </li>
                 <li class="relative mb-7 w-full">
                   <select
-                    name="交易方式"
-                    class="w-full rounded-lg border-2 py-2 px-3"
+                    name="payment"
+                    class="js-payment w-full rounded-lg border-2 py-2 px-3"
                   >
                     <option value="ATM">ATM</option>
                     <option value="信用卡">信用卡</option>
@@ -340,7 +432,7 @@ const showModalfunc= async () => {
                 </li>
               </ul>
             </form>
-            <button class="rounded-md bg-black hover:bg-primary px-16 py-3 text-xl text-white duration-150">
+            <button class="js-submitOrders rounded-md bg-black hover:bg-primary px-16 py-3 text-xl text-white duration-150">
               送出預訂資料
             </button>
           </div>
@@ -349,11 +441,25 @@ const showModalfunc= async () => {
     `
   }
   closeModalfunc()
+  submitModalfunc()
 }
 
 
-//執行－監聽事件
-submitCarts.addEventListener("click", showModalfunc);
+//觸發－訂單視窗
+submitCarts.addEventListener("click", async() => {
+  let res = await renderCarts()
+  if(res.firstChild === null){
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: `請選購至少一件商品！`,
+      showConfirmButton: false,
+      timer: 5000,
+    })
+  }else{
+    showModalfunc()
+  }
+});
 
 
 
