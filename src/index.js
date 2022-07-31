@@ -340,7 +340,6 @@ const submitModalfunc = () => {
       return
     }
 
-    console.log(obj)
 
     axios.post(`${userApi}/orders`, obj)
     .then(res => {
@@ -354,6 +353,7 @@ const submitModalfunc = () => {
       });
       showModal = !showModal
       closeModal.remove()
+      renderCarts()
     })
     .catch(err => {
       console.log(err)
@@ -452,7 +452,7 @@ submitCarts.addEventListener("click", async() => {
     Swal.fire({
       position: "center",
       icon: "error",
-      title: `請選購至少一件商品！`,
+      title: `請至少選購一件商品！`,
       showConfirmButton: false,
       timer: 5000,
     })
