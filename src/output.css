@@ -742,10 +742,6 @@ body{
   height: 100vh;
 }
 
-.h-\[600px\]{
-  height: 600px;
-}
-
 .max-h-24{
   max-height: 6rem;
 }
@@ -790,8 +786,8 @@ body{
   width: min-content;
 }
 
-.max-w-sm{
-  max-width: 24rem;
+.max-w-lg{
+  max-width: 32rem;
 }
 
 .max-w-\[920px\]{
@@ -802,8 +798,8 @@ body{
   max-width: 36rem;
 }
 
-.max-w-lg{
-  max-width: 32rem;
+.max-w-sm{
+  max-width: 24rem;
 }
 
 .table-auto{
@@ -993,10 +989,6 @@ body{
 
 .p-3{
   padding: 0.75rem;
-}
-
-.p-5{
-  padding: 1.25rem;
 }
 
 .py-10{

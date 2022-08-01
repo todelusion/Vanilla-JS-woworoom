@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
+    "dev": "npx tailwindcss -i ./src/input.css -o ./src/output.css --watch",
     "pr": "prettier -w ./src"
   },
   "devDependencies": {
