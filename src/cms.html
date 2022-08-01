@@ -5,13 +5,56 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../dist/output.css" />
+    <link rel="stylesheet" href="./cms.css">
     <title>WowoRoom_CMS</title>
   </head>
   <body>
-    <div class="max-w-2xl brightness-200">
-      <canvas id="myChart"></canvas>
-    </div>
+    <nav
+    class="container mx-auto flex w-full flex-col items-center justify-between py-10 sm:flex-row"
+  >
+    <a href="./index.html"
+      ><img
+        src="./image/logo.svg"
+        alt="logo"
+        class="mb-5 w-52 sm:mb-0 sm:w-40"
+    /></a>
+    <ul class="flex text-base font-bold sm:text-xl">
+      <li>後臺管理</li>
+      <li class="ml-12">管理員登入</li>
+    </ul>
+    </nav>
+    <div class="h-10 w-full bg-black mb-16"></div>
+    <section>
+      <h2 class="text-2xl text-center mb-10 font-bold">全品項營收比重</h2>
+      <div class="max-w-lg mx-auto">
+        <canvas id="myChart"></canvas>
+      </div>
+    </section>
+    <section class="wrap orderPage-list">
+      <a class="discardAllBtn">清除全部訂單</a>
+      <div class="orderTableWrap">
+          <table class="orderPage-table">
+              <thead>
+                  <tr>
+                      <th>訂單編號</th>
+                      <th>聯絡人</th>
+                      <th>聯絡地址</th>
+                      <th>電子郵件</th>
+                      <th>訂單品項</th>
+                      <th>訂單日期</th>
+                      <th>訂單狀態</th>
+                      <th>操作</th>
+                  </tr>
+              </thead>
+              <tbody class="orderPage-body">
+              </tbody>
+          </table>
+      </div>
+    </section>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.2/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.0.0/chartjs-plugin-datalabels.min.js" integrity="sha512-R/QOHLpV1Ggq22vfDAWYOaMd5RopHrJNMxi8/lJu8Oihwi4Ho4BRFeiMiCefn9rasajKjnx9/fTQ/xkWnkDACg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js" integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="./cms.js"></script>
   </body>
 </html>
