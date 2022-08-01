@@ -115,13 +115,14 @@ const myChart = async() => {
   return new Chart(ctx, config)
 }
 
-myChart()
-
 /* CMS */
 
 
-function init(){
-  renderOrder()
+async function init(){
+  let res = await renderOrder()
+  if(res !== ''){
+    myChart()
+  }
 }
 
 async function getApi (){
@@ -165,6 +166,7 @@ const renderOrder = async(data) => {
     output += str
   })
   orderList.innerHTML = output
+  return output
 }
 const deleteOrder = async(listID) => {
   // console.log('delete')
@@ -182,21 +184,8 @@ const deleteOrder = async(listID) => {
 }
 const deleteOrderAll = async() => {
   axios.delete(`${adminApi}/orders`, token)
-  .then(res => {
-    Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "全部刪除",
-      showConfirmButton: false,
-      timer: 5000,
-    });
-    renderOrder(res.data.orders)
-  })
+  .then(res => location.reload())
 }
-
-
-init()
-
 
 orderPage.addEventListener('click', (e) => {
   if(e.target.className == 'delSingleOrder-Btn'){
@@ -247,5 +236,7 @@ orderPage.addEventListener('click', (e) => {
   }
 })
 
+
+init()
 
 
